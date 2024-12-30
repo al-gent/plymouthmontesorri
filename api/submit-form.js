@@ -3,12 +3,25 @@ import { promises as fs } from 'fs';
 import path from 'path';
 
 export default async function handler(req, res) {
+  console.log('Handler invoked'); // Log to confirm function is triggered
   if (req.method === 'POST') {
     try {
       // Load service account credentials
-      const keyFilePath = path.join(process.cwd(), 'service-account.json');
-      const credentials = JSON.parse(await fs.readFile(keyFilePath, 'utf8'));
+      const credentials = {
+        type: 'service_account',
+        project_id: process.env.SERVICE_ACCOUNT_PROJECT_ID,
+        private_key_id: process.env.SERVICE_ACCOUNT_PRIVATE_KEY_ID,
+        private_key: process.env.SERVICE_ACCOUNT_PRIVATE_KEY.replace(/\\n/g, '\n'),
+        client_email: process.env.SERVICE_ACCOUNT_CLIENT_EMAIL,
+        client_id: process.env.SERVICE_ACCOUNT_CLIENT_ID,
+        auth_uri: process.env.SERVICE_ACCOUNT_AUTH_URI,
+        token_uri: process.env.SERVICE_ACCOUNT_TOKEN_URI,
+        auth_provider_x509_cert_url: process.env.SERVICE_ACCOUNT_AUTH_PROVIDER_CERT_URL,
+        client_x509_cert_url: process.env.SERVICE_ACCOUNT_CLIENT_CERT_URL,
+        universe_domain: "googleapis.com"
 
+      };
+      console.log(credentials)
       // Authenticate with Google Sheets API
       const auth = new google.auth.GoogleAuth({
         credentials,
