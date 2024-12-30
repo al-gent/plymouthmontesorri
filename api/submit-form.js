@@ -14,7 +14,7 @@ export default async function handler(req, res) {
         credentials,
         scopes: ['https://www.googleapis.com/auth/spreadsheets'],
       });
-
+      
       const sheets = google.sheets({ version: 'v4', auth });
 
       // Your Google Sheet ID
@@ -22,8 +22,22 @@ export default async function handler(req, res) {
 
       // Get form data
       const { name, email, comments } = req.body;
-      const timestamp = new Date().toISOString();
+      const now = new Date();
 
+      // Convert to US Central Time
+      const options = {
+        timeZone: 'America/Chicago',
+        year: 'numeric',
+        month: 'long', // Full month name
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true, // 12-hour format
+      };
+      
+      const timestamp = new Intl.DateTimeFormat('en-US', options).format(now);
+    
+      
       // Append data to the sheet
       await sheets.spreadsheets.values.append({
         spreadsheetId,

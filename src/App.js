@@ -13,6 +13,7 @@ const App = () => {
     <Router>
       <Navbar />
       <Routes>
+        <Route path="/" element={<Welcome />} /> 
         <Route path="/welcome" element={<Welcome />} />
         <Route path="/montessori-theory" element={<MontessoriTheory />} />
         <Route path="/locations" element={<Locations />} />
